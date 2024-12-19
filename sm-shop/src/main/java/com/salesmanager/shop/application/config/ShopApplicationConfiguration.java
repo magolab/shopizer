@@ -97,27 +97,6 @@ public class ShopApplicationConfiguration implements WebMvcConfigurer {
             .addPathPatterns("/api/**");
   }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-      registry.addMapping("/shop/**")
-              .allowedOrigins("http://pesco.iptime.org:8082")
-              .allowedMethods("GET", "POST", "PUT", "DELETE")
-              .allowedHeaders("*")
-              .allowCredentials(true);
-
-      registry.addMapping("/api/**")
-              .allowedOrigins("http://pesco.iptime.org:8082")
-              .allowedMethods("GET", "POST")
-              .allowedHeaders("*")
-              .allowCredentials(true);
-
-      registry.addMapping("/customer/**")
-              .allowedOrigins("http://pesco.iptime.org:8082")
-              .allowedMethods("GET", "POST")
-              .allowedHeaders("*")
-              .allowCredentials(true);
-  }
-
   @Bean
   public ByteArrayHttpMessageConverter byteArrayHttpMessageConverter() {
     List<MediaType> supportedMediaTypes = Arrays.asList(IMAGE_JPEG, IMAGE_GIF, IMAGE_PNG, APPLICATION_OCTET_STREAM);

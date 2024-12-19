@@ -1,45 +1,39 @@
 package com.salesmanager.shop.filter;
 
-import java.io.IOException;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+@Component
+public class CorsFilter implements HandlerInterceptor {
 
-public class CorsFilter extends HandlerInterceptorAdapter {
+	private static final String ALLOWED_ORIGINS = "http://pesco.iptime.org:8082";
+	private static final String ALLOWED_METHODS = "GET, POST, PUT, DELETE";
+	private static final String ALLOWED_HEADERS = "X-Auth-Token, Content-Type, Authorization, Cache-Control, X-Requested-With";
 
-		public CorsFilter() {
-			
+	public CorsFilter() {}
+
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+		String origin = request.getHeader("Origin");
+		if (origin == null || !ALLOWED_ORIGINS.equals(origin)) {
+			origin = "*";
 		}
 
-		/**
-		 * Allows public web services to work from remote hosts
-		 */
-	   public boolean preHandle(
-	            HttpServletRequest request,
-	            HttpServletResponse response,
-	            Object handler) throws Exception {
-		   
-        	HttpServletResponse httpResponse = (HttpServletResponse) response;
-        	
-        	String origin = "*";
-        	if(!StringUtils.isBlank(request.getHeader("origin"))) {
-        		origin = request.getHeader("origin");
-        	}
-	
-	        httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, PATCH");
-        	httpResponse.setHeader("Access-Control-Allow-Headers", "X-Auth-Token, Content-Type, Authorization, Cache-Control, X-Requested-With");
-        	httpResponse.setHeader("Access-Control-Allow-Origin", origin);
-	        
-        	return true;
-			
+		httpResponse.setHeader("Access-Control-Allow-Origin", origin);
+		httpResponse.setHeader("Access-Control-Allow-Methods", ALLOWED_METHODS);
+		httpResponse.setHeader("Access-Control-Allow-Headers", ALLOWED_HEADERS);
+		httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
+
+		if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+			httpResponse.setStatus(HttpServletResponse.SC_OK);
+			return false;
 		}
+
+		return true;
+	}
 }
