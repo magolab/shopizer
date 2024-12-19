@@ -25,6 +25,7 @@ import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -80,40 +81,41 @@ public class ShopApplicationConfiguration implements WebMvcConfigurer {
     registry.addInterceptor(localeChangeInterceptor());
 
     /**
-    registry
-        .addInterceptor(storeFilter())
-        // store web front filter
-        .addPathPatterns("/shop/**")
-        // customer section filter
-        .addPathPatterns("/customer/**");
+     registry
+     .addInterceptor(storeFilter())
+     // store web front filter
+     .addPathPatterns("/shop/**")
+     // customer section filter
+     .addPathPatterns("/customer/**");
      **/
-    registry.addMapping("/shop/**")
-            .allowedOrigins("http://pesco.iptime.org:8082")
-            .allowedMethods("GET", "POST", "PUT", "DELETE")
-            .allowedHeaders("*")
-            .allowCredentials(true);
-
-    registry.addMapping("/api/**")
-            .allowedOrigins("http://pesco.iptime.org:8082")
-            .allowedMethods("GET", "POST")
-            .allowedHeaders("*")
-            .allowCredentials(true);
-
-    registry.addMapping("/customer/**")
-            .allowedOrigins("http://pesco.iptime.org:8082")
-            .allowedMethods("GET", "POST")
-            .allowedHeaders("*")
-            .allowCredentials(true);
 
     registry
-        .addInterceptor(corsFilter())
-        // public services cors filter
-        .addPathPatterns("/services/**")
-        // REST api
-        .addPathPatterns("/api/**")
-        
-        ;
+            .addInterceptor(corsFilter())
+            // public services cors filter
+            .addPathPatterns("/services/**")
+            // REST api
+            .addPathPatterns("/api/**");
+  }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+      registry.addMapping("/shop/**")
+              .allowedOrigins("http://pesco.iptime.org:8082")
+              .allowedMethods("GET", "POST", "PUT", "DELETE")
+              .allowedHeaders("*")
+              .allowCredentials(true);
+
+      registry.addMapping("/api/**")
+              .allowedOrigins("http://pesco.iptime.org:8082")
+              .allowedMethods("GET", "POST")
+              .allowedHeaders("*")
+              .allowCredentials(true);
+
+      registry.addMapping("/customer/**")
+              .allowedOrigins("http://pesco.iptime.org:8082")
+              .allowedMethods("GET", "POST")
+              .allowedHeaders("*")
+              .allowCredentials(true);
   }
 
   @Bean
