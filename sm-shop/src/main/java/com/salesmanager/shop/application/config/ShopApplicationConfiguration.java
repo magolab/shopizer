@@ -87,13 +87,32 @@ public class ShopApplicationConfiguration implements WebMvcConfigurer {
         // customer section filter
         .addPathPatterns("/customer/**");
      **/
+    registry.addMapping("/shop/**")
+            .allowedOrigins("http://pesco.iptime.org:8082")
+            .allowedMethods("GET", "POST", "PUT", "DELETE")
+            .allowedHeaders("*")
+            .allowCredentials(true);
+
+    registry.addMapping("/api/**")
+            .allowedOrigins("http://pesco.iptime.org:8082")
+            .allowedMethods("GET", "POST")
+            .allowedHeaders("*")
+            .allowCredentials(true);
+
+    registry.addMapping("/customer/**")
+            .allowedOrigins("http://pesco.iptime.org:8082")
+            .allowedMethods("GET", "POST")
+            .allowedHeaders("*")
+            .allowCredentials(true);
 
     registry
         .addInterceptor(corsFilter())
         // public services cors filter
         .addPathPatterns("/services/**")
         // REST api
-        .addPathPatterns("/api/**");
+        .addPathPatterns("/api/**")
+        
+        ;
 
   }
 
