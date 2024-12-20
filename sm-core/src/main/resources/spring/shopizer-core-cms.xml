@@ -112,7 +112,33 @@
 			<beans:ref bean="downloadsManager" />
 		</beans:property>
 	</beans:bean>
-	
+
+
+	<beans:bean id="mysqlProductAssetsManager"
+				class="com.salesmanager.core.business.modules.cms.product.infinispan.CmsImageFileManagerImpl" factory-method="getInstance" >
+		<!-- internal implementation -->
+		<beans:property name="cacheManager">
+			<beans:ref bean="infinispanProductAssetsManager" />
+		</beans:property>
+	</beans:bean>
+
+	<!-- store images, js, css [[static images]] -->
+	<beans:bean id="mysqlContentAssetsManager"
+				class="com.salesmanager.core.business.modules.cms.content.infinispan.CmsStaticContentFileManagerImpl" factory-method="getInstance" >
+		<beans:property name="cacheManager">
+			<beans:ref bean="infinispanStaticAssetsManager" />
+		</beans:property>
+	</beans:bean>
+
+
+	<!-- Product download files -->
+	<beans:bean id="mysqlDownloadsManager" class="com.salesmanager.core.business.modules.cms.content.infinispan.CmsStaticContentFileManagerImpl" factory-method="getInstance">
+		<beans:property name="cacheManager">
+			<beans:ref bean="downloadsManager" />
+		</beans:property>
+	</beans:bean>
+
+
 	<!-- Httpd -->
 	
 	<beans:bean id="httpdProductAssetsManager"
